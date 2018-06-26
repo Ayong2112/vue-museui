@@ -17,7 +17,12 @@
 			}
 		},
 		created: function() {
-			this.bottomNav = this.$route.path;
+			if(this.$route.path=='/'){
+				this.bottomNav='/dayDream'
+			}else{
+				this.bottomNav = this.$route.path;
+			}
+			
 		}
 	}
 </script>

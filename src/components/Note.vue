@@ -1,8 +1,9 @@
 <template>
 	<div>
-	<v-header header='Note'></v-header>
+		<v-header header='Note'></v-header>
+
 		<bottom-navigation></bottom-navigation>
-		
+
 	</div>
 </template>
 
@@ -14,5 +15,6 @@
 			bottomNavigation,
 			vHeader
 		},
+
 	}
 </script>

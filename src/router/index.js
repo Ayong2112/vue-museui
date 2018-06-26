@@ -1,12 +1,19 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+const Index = resolve => {
+    require.ensure(['../components/index.vue'], () => {
+        resolve(require('../components/index.vue'))
+    })
+}
+
 Vue.use(Router);
 
 var routes = [
+
     {
         path: '/',
-        component: resolve => require(['../components/HelloWorld.vue'], resolve),
+        component: resolve => require(['../components/DayDream.vue'], resolve),
         // children: [
         //     {
         //         path: '/home',
@@ -14,10 +21,7 @@ var routes = [
         //     }
         // ]
     },
-    {
-    	path: '/index',
-    	component: resolve => require(['../components/index.vue'], resolve),
-    },
+     { path: '/index', component: Index, name: 'Index' },,
      {
         path: '/me',
         component: resolve => require(['../components/Me.vue'], resolve),
@@ -53,7 +57,7 @@ var routes = [
 //     next()
 // })
 export default new Router({
-    mode: 'history',
+    // mode: 'history',
     routes: routes
 })
 
