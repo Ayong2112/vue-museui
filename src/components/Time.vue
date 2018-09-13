@@ -1,6 +1,9 @@
 <template>
 	<div>
 		<v-header header='Time'></v-header>
+		<div class='messages'>
+			<span class="xin">❤</span>亲爱的,这是我们一起走过的时光<span class="xin">❤</span></div>
+		<div v-html='timeKeeping'></div>
 		<div class="box">
 			<div class="clock" id="clock">
 				<div class="clock-xin"></div>
@@ -14,14 +17,22 @@
 		<bottom-navigation></bottom-navigation>
 	</div>
 </template>
-<style scoped>
-	/*body {
-			background: #0f3854;
-			background: -webkit-radial-gradient(center ellipse, #0a2e38 0%, #000000 70%);
-			background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%);
-			background-size: 100%;
-		}
-		*/
+<style>
+	em {
+		position: absolute;
+	}
+	
+	.clock em {
+		display: block;
+		width: 2px;
+		height: 5px;
+		background: #000;
+		position: absolute;
+		top: 0;
+		left: 0;
+		-webkit-transform-origin: 50% 0;
+		margin-left: -1px;
+	}
 	
 	.box {
 		padding-top: 50px;
@@ -32,8 +43,8 @@
 	.clock {
 		margin: 0 auto;
 		position: relative;
-		width: 200px;
-		height: 200px;
+		width: 210px;
+		height: 210px;
 		border: 5px solid #fff;
 		border-radius: 200px;
 		background: -webkit-radial-gradient(center center, circle, #fff, #bbb);
@@ -140,6 +151,21 @@
 		left: -7px;
 		text-shadow: 1px 1px white;
 	}
+	
+	.digit {
+		font-family: "digit";
+		font-size: 36px;
+		color: #F63756
+	}
+	
+	.messages {
+		font-family: "sans-serif";
+		font-size: 21px;
+		color: #666
+	}
+	.xin{
+		color:#F63756
+	}
 </style>
 <script>
 	import bottomNavigation from './BottomNavigation.vue';
@@ -149,22 +175,52 @@
 			bottomNavigation,
 			vHeader
 		},
-		created() {
-
+		data() {
+			return {
+				timeKeeping: ''
+			}
 		},
 		mounted() {
 			this.updateTime()
+			this.timekeeping()
 		},
 		methods: {
+			timekeeping() {
+				var self = this
+				var timer = setInterval(function() {
+					var startTime = new Date();
+					startTime.setFullYear(2014, 2, 14);
+					startTime.setHours(0);
+					startTime.setMinutes(0);
+					startTime.setSeconds(0);
+					startTime.setMilliseconds(0);
+					var endTime = new Date();
+					var rangeTime = endTime - startTime
+					var d, h, m, s, m, ms;
+					d = Math.floor(rangeTime / 1000 / 60 / 60 / 24);
+					h = Math.floor(rangeTime / 1000 / 60 / 60 % 24);
+					m = Math.floor(rangeTime / 1000 / 60 % 60);
+					s = Math.floor(rangeTime / 1000 % 60);
+					ms = Math.floor(rangeTime % 1000);
+					ms = ms < 100 && ms > 9 ? "0" + ms : ms < 9 ? "00" + ms : ms
+					s = s < 10 ? "0" + s : s
+					m = m < 10 ? "0" + m : m
+					h = h < 10 ? "0" + h : h
+					let format = "<span class=\"digit\">" + d + "</span> 天 <span class=\"digit\">" + h +
+						"</span> 时 <span class=\"digit\">" + m + "</span> 分 <span class=\"digit\">" +
+						s + "</span> 秒 ";
+					self.timeKeeping = format
+					clearInterval(this.timer);
+				}, 1000)
+			},
 			updateTime() {
-
 				var winHeight = document.documentElement.clientHeight;
 				document.getElementsByTagName('body')[0].style.height = winHeight + 'px';
 				var $clock = document.getElementById('clock'),
 					$date = document.getElementById('date'),
 					$hour = document.getElementById('hour'),
-					$min = document.getElementById('min'),
 					$sec = document.getElementById('sec'),
+					$min = document.getElementById('min'),
 					oSecs = document.createElement('em');
 				for(var i = 1; i < 61; i++) {
 					var tempSecs = oSecs.cloneNode(),
@@ -173,7 +229,7 @@
 						tempSecs.className = 'ishour';
 						tempSecs.innerHTML = '<i style="-webkit-transform:rotate(' + (-i * 6) + 'deg);">' + (i / 5) + '</i>';
 					}
-					tempSecs.style.cssText = 'left:' + pos.x + 'px; top:' + pos.y + 'px; -webkit-transform:rotate(' + i * 6 + 'deg);';
+					tempSecs.style.cssText += 'position:absolute;' + 'left:' + pos.x + 'px; top:' + pos.y + 'px; -webkit-transform:rotate(' + i * 6 + 'deg)';
 					$clock.appendChild(tempSecs);
 				}
 				// 圆弧上的坐标换算 

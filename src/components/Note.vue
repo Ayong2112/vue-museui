@@ -15,6 +15,11 @@
 			bottomNavigation,
 			vHeader
 		},
+		data(){
+			return{
+				
+			}
+		}
 
 	}
 </script>

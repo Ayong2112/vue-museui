@@ -4,13 +4,13 @@
 		<mu-container>
 			<mu-form ref="form" :model="form" class="mu-demo-form" :label-position="labelPosition" label-width="100">
 				<mu-form-item label="起始数字：" help-text="" prop="startNum" :rules="startNumRules">
-					<mu-text-field type="number" v-model="form.startNum" prop="startNum" min='0' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
+					<mu-text-field type="number" placeholder="请输入起始数字" v-model="form.startNum" prop="startNum" min='0' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
 				</mu-form-item>
 				<mu-form-item label="结束数字：" prop="endNum" :rules="endNumRules">
-					<mu-text-field type="number" v-model="form.endNum" prop="endNum" min='0' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
+					<mu-text-field type="number" placeholder="请输入结束数字" v-model="form.endNum" prop="endNum" min='0' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
 				</mu-form-item>
 				<mu-form-item label="数字数目：" prop="totalNum" :rules="totalNumRules">
-					<mu-text-field type="number" v-model="form.totalNum" prop="totalNum" min='1' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
+					<mu-text-field type="number" placeholder="请输入数字数目" v-model="form.totalNum" prop="totalNum" min='1' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
 				</mu-form-item>
 				<mu-form-item prop="isSole" label="是否唯一：">
 					<mu-radio v-model="form.isSole" value="否" label="否"></mu-radio>
@@ -23,7 +23,7 @@
 					</mu-select>
 				</mu-form-item>
 				<mu-form-item prop="result" label="输出结果：">
-					<mu-text-field multi-line :rows="1" :rows-max="6" v-model="result"></mu-text-field>
+					<mu-text-field multi-line :rows="1" :rows-max="6" v-model="result" readonly="readonly"></mu-text-field>
 				</mu-form-item>
 				<mu-form-item>
 					<mu-button color="primary" @click="submit">确定</mu-button>
