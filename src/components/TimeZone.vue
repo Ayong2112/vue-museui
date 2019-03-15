@@ -1,172 +1,79 @@
 <template>
 	<div>
-		<v-header header='Time'></v-header>		
-<!-- 		<div class='messages'>
-			<span class="xin">❤</span>亲爱的,这是我们一起走过的时光<span class="xin">❤</span></div> -->
-		<div v-html='timeKeeping'></div>
-		<div class="box">
-			<div class="clock" id="clock">
-				<div class="clock-xin"></div>
-				<div class="clock-xin2"></div>
-				<div id="date" class="date"></div>
-				<div id="hour" class="hour"></div>
-				<div id="min" class="min"></div>
-				<div id="sec" class="sec"></div>
+		<v-header header='TimeZone'></v-header>
+		<mu-container>
+			<mu-tabs :value.sync="timeZoonActive" text-color="rgba(0, 0, 0, .54)" inverse color="#2196f3"  indicator-color="#2196f3" full-width>
+				<mu-tab>夏令时</mu-tab>
+				<mu-tab>冬令时</mu-tab>
+				<mu-tab>时区</mu-tab>
+			</mu-tabs>
+			<div class="demo-text" v-if="timeZoonActive === 0">
+				<mu-form :model="daylightSavingTimeForm"  label-position="right" label-width="110">
+					<mu-form-item prop="input" label="已知时区">
+						<mu-select v-model="daylightSavingTimeForm.daylightSavingKnowntimeZone" @change="getDaylightSavingUnkowntime()">
+							<mu-option v-for="item in daylightSavingTimeCityData" :key="item.timeRange" :label="item.city" :value="item.timeRange"></mu-option>
+						</mu-select>
+					</mu-form-item>
+					<mu-form-item prop="select" label="已知时区时间:">
+						<mu-date-input v-model="daylightSavingTimeForm.daylightSavingKnowntime" type="dateTime" actions clock-type="24hr" @input='getDaylightSavingUnkowntime()'
+						 view-type="list"></mu-date-input>
+					</mu-form-item>
+					<mu-form-item prop="date" label="换算时区:">
+						<mu-select v-model="daylightSavingTimeForm.daylightSavingUnknowntimeZone" @change="getDaylightSavingUnkowntime()">
+							<mu-option v-for="item in daylightSavingTimeCityData" :key="item.city" :label="item.city" :value="item.timeRange"></mu-option>
+						</mu-select>
+					</mu-form-item>
+					<mu-form-item prop="radio" label="换算时区时间:">
+						<mu-date-input v-model="daylightSavingTimeForm.daylightSavingUnkowntime" type="dateTime"  disabled></mu-date-input>
+					</mu-form-item>
+				</mu-form>
 			</div>
-		</div>
+			<div class="demo-text" v-if="timeZoonActive === 1">
+				<mu-form :model="standardTimeForm"  label-position="right" label-width="110">
+					<mu-form-item prop="input" label="已知时区">
+						<mu-select v-model="standardTimeForm.standardKnowntimeZone" @change="getstandardUnkowntime()">
+							<mu-option v-for="item in standardTimeCityData" :key="item.timeRange" :label="item.city" :value="item.timeRange"></mu-option>
+						</mu-select>
+					</mu-form-item>
+					<mu-form-item prop="select" label="已知时区时间:">
+						<mu-date-input v-model="standardTimeForm.standardKnowntime" type="dateTime" actions clock-type="24hr" @input='getstandardUnkowntime()'
+						 view-type="list"></mu-date-input>
+					</mu-form-item>
+					<mu-form-item prop="date" label="换算时区:">
+						<mu-select v-model="standardTimeForm.standardUnknowntimeZone" @change="getstandardUnkowntime()">
+							<mu-option v-for="item in standardTimeCityData" :key="item.city" :label="item.city" :value="item.timeRange"></mu-option>
+						</mu-select>
+					</mu-form-item>
+					<mu-form-item prop="radio" label="换算时区时间:">
+						<mu-date-input v-model="standardTimeForm.standardUnkowntime" type="dateTime"  disabled></mu-date-input>
+					</mu-form-item>
+				</mu-form>
+			</div>
+			<div class="demo-text" v-if="timeZoonActive === 2">
+				<mu-form :model="timeZoneForm"  label-position="right" label-width="110">
+					<mu-form-item prop="input" label="已知时区">
+						<mu-select v-model="timeZoneForm.knownTimeZone" @change="getmatrixingTimeZoneTime()">
+							<mu-option v-for="item in timeZoneData" :key="item.name" :label="item.name" :value="item.value"></mu-option>
+						</mu-select>
+					</mu-form-item>
+					<mu-form-item prop="select" label="已知时区时间:">
+						<mu-date-input v-model="timeZoneForm.knownTimeZoneTime" type="dateTime" actions clock-type="24hr" @input='getmatrixingTimeZoneTime()'
+						 view-type="list"></mu-date-input>
+					</mu-form-item>
+					<mu-form-item prop="date" label="换算时区:">
+						<mu-select v-model="timeZoneForm.matrixingTimeZone" @change="getmatrixingTimeZoneTime()">
+							<mu-option v-for="item in timeZoneData" :key="item.city" :label="item.name" :value="item.value"></mu-option>
+						</mu-select>
+					</mu-form-item>
+					<mu-form-item prop="radio" label="换算时区时间:">
+						<mu-date-input v-model="timeZoneForm.matrixingTimeZoneTime" type="dateTime"  disabled></mu-date-input>
+					</mu-form-item>
+				</mu-form>
+			</div>
+		</mu-container>
 		<bottom-navigation></bottom-navigation>
 	</div>
 </template>
-<style>
-	em {
-		position: absolute;
-	}
-	
-	.clock em {
-		display: block;
-		width: 2px;
-		height: 5px;
-		background: #000;
-		position: absolute;
-		top: 0;
-		left: 0;
-		-webkit-transform-origin: 50% 0;
-		margin-left: -1px;
-	}
-	
-	.box {
-		padding-top: 50px;
-		width: 100%;
-		margin: 0 auto;
-	}
-	
-	.clock {
-		margin: 0 auto;
-		position: relative;
-		width: 210px;
-		height: 210px;
-		border: 5px solid #fff;
-		border-radius: 200px;
-		background: -webkit-radial-gradient(center center, circle, #fff, #bbb);
-		box-shadow: 1px 1px 30px rgba(0, 0, 0, 0.8);
-	}
-	
-	.clock .clock-xin {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 30px;
-		height: 30px;
-		border-radius: 15px;
-		background: #eee;
-		margin: -15px 0 0 -15px;
-	}
-	
-	.clock .clock-xin2 {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 12px;
-		height: 12px;
-		border-radius: 6px;
-		background: #f00;
-		z-index: 100;
-		margin: -6px 0 0 -6px;
-	}
-	
-	.clock .date {
-		position: absolute;
-		width: 100%;
-		text-align: center;
-		z-index: 3;
-		top: 108%;
-		/*left: 130px;*/
-		left: 0;
-		font-size: 20px;
-		color: #000;
-		text-shadow: 1px 1px white;
-	}
-	
-	.clock .hour {
-		position: absolute;
-		z-index: 3;
-		top: 50%;
-		left: 50%;
-		width: 80px;
-		height: 6px;
-		border-radius: 5px;
-		background: #000;
-		-webkit-transform-origin: 10px 50%;
-		margin: -3px 0 0 -10px;
-	}
-	
-	.clock .min {
-		position: absolute;
-		z-index: 4;
-		top: 50%;
-		left: 50%;
-		width: 90px;
-		height: 4px;
-		border-radius: 5px;
-		background: #333;
-		-webkit-transform-origin: 10px 50%;
-		margin: -2px 0 0 -10px;
-	}
-	
-	.clock .sec {
-		position: absolute;
-		z-index: 5;
-		top: 50%;
-		left: 50%;
-		width: 105px;
-		height: 2px;
-		background: #f00;
-		-webkit-transform-origin: 30px 50%;
-		margin: -1px 0 0 -30px;
-	}
-	
-	.clock em {
-		display: block;
-		width: 2px;
-		height: 5px;
-		background: #000;
-		position: absolute;
-		top: 0;
-		left: 0;
-		-webkit-transform-origin: 50% 0;
-		margin-left: -1px;
-	}
-	
-	.clock em.ishour {
-		width: 6px;
-		height: 10px;
-		margin-left: -3px;
-	}
-	
-	.clock em.ishour i {
-		font-size: 25px;
-		color: #000;
-		position: absolute;
-		top: 12px;
-		left: -7px;
-		text-shadow: 1px 1px white;
-	}
-	
-	.digit {
-		font-family: "digit";
-		font-size: 36px;
-		color: #F63756
-	}
-	
-	.messages {
-		font-family: "sans-serif";
-		font-size: 21px;
-		color: #666
-	}
-	.xin{
-		color:#F63756
-	}
-</style>
 <script>
 	import bottomNavigation from './BottomNavigation.vue';
 	import vHeader from './Header.vue';
@@ -177,150 +84,178 @@
 		},
 		data() {
 			return {
-				timeTime:'',
-				timeKeeping: '',
+				timeZoonActive:0,
+				// 夏令时
+				daylightSavingTimeForm: {
+					daylightSavingKnowntimeZone: '',
+					daylightSavingKnowntime: '',
+					daylightSavingUnknowntimeZone: '',
+					daylightSavingUnkowntime: '',
+				},
+				daylightSavingTimeCityData: [{
+					city:'北京',
+					timeRange:0
+				}, {
+					city: '纽约、华盛顿--东部时区(12)',
+					timeRange: 12
+				}, {
+					city: '芝加哥--中部时区(13)',
+					timeRange: 13
+				}, {
+					city: '盐湖城--山地时区(14)',
+					timeRange: 14
+				}, {
+					city: '洛杉矶--太平洋时区(15)',
+					timeRange: 15
+				}, {
+					city: '费尔班克斯--阿拉斯加时区(16)',
+					timeRange: 16
+				}, {
+					city: '火奴鲁鲁--夏威夷时区(17)',
+					timeRange: 17
+				}],
+				// 冬令时
+				standardTimeForm: {
+					standardKnowntimeZone: '',
+					standardKnowntime: '',
+					standardUnknowntimeZone: '',
+					standardUnkowntime: '',
+				},
+				standardTimeCityData: [{
+					city:'北京',
+					timeRange:0
+				}, {
+					city: '纽约、华盛顿--东部时区(13)',
+					timeRange: 13
+				}, {
+					city: '芝加哥--中部时区(14)',
+					timeRange: 14
+				}, {
+					city: '盐湖城--山地时区(15)',
+					timeRange: 15
+				}, {
+					city: '洛杉矶--太平洋时区(16)',
+					timeRange: 16
+				}, {
+					city: '费尔班克斯--阿拉斯加时区(17)',
+					timeRange: 17
+				}, {
+					city: '火奴鲁鲁--夏威夷时区(18)',
+					timeRange: 18
+				}],
+				// 时区
+				timeZoneForm: {
+					knownTimeZone: '',
+					knownTimeZoneTime: '',
+					matrixingTimeZone: '', //换算时区
+					matrixingTimeZoneTime: '', //换算时区时间
+				},
+				timeZoneData: [{
+					name: '零时区(中时区)',
+					value: 0
+				}, {
+					name: '东一区',
+					value: 1
+				}, {
+					name: '东二区',
+					value: 2
+				}, {
+					name: '东三区',
+					value: 3
+				}, {
+					name: '东四区',
+					value: 4
+				}, {
+					name: '东五区',
+					value: 5
+				}, {
+					name: '东六区',
+					value: 6
+				}, {
+					name: '东七区',
+					value: 7
+				}, {
+					name: '东八区',
+					value: 8
+				}, {
+					name: '东九区',
+					value: 9
+				}, {
+					name: '东十区',
+					value: 10
+				}, {
+					name: '东十一区',
+					value: 11
+				}, {
+					name: '东西十二区',
+					value: 12
+				}, {
+					name: '西一区',
+					value: -1
+				}, {
+					name: '西二区',
+					value: -2
+				}, {
+					name: '西三区',
+					value: -3
+				}, {
+					name: '西四区',
+					value: -4
+				}, {
+					name: '西五区',
+					value: -5
+				}, {
+					name: '西六区',
+					value: -6
+				}, {
+					name: '西七区',
+					value: -7
+				}, {
+					name: '西八区',
+					value: -8
+				}, {
+					name: '西九区',
+					value: -9
+				}, {
+					name: '西十区',
+					value: -10
+				}, {
+					name: '西十一区',
+					value: -11
+				}],
 			}
 		},
-		created(){
-			// this.timeTime = new Date()
-		},
-		mounted() {
-			this.updateTime()
-			this.timekeeping()
+		// html渲染前
+		created() {
+			// 夏令时
+			this.daylightSavingTimeForm.daylightSavingKnowntimeZone = this.daylightSavingTimeCityData[0].timeRange
+			this.daylightSavingTimeForm.daylightSavingKnowntime = new Date()
+			this.daylightSavingTimeForm.daylightSavingUnknowntimeZone = this.daylightSavingTimeCityData[4].timeRange
+			this.getDaylightSavingUnkowntime()
+			// 冬令时
+			this.standardTimeForm.standardKnowntimeZone = this.standardTimeCityData[0].timeRange
+			this.standardTimeForm.standardKnowntime = new Date()
+			this.standardTimeForm.standardUnknowntimeZone = this.standardTimeCityData[4].timeRange
+			this.getstandardUnkowntime()
+			// 时区
+			this.timeZoneForm.knownTimeZone = this.timeZoneData[8].value
+			this.timeZoneForm.knownTimeZoneTime = new Date()
+			this.timeZoneForm.matrixingTimeZone = this.timeZoneData[8].value
+			this.getmatrixingTimeZoneTime()
 		},
 		methods: {
-			
-			changeTimeTime(){
-				console.log(this.timeTime)
-				this.timekeeping()
+			// 夏令时
+			getDaylightSavingUnkowntime(){
+				this.daylightSavingTimeForm.daylightSavingUnkowntime = new Date(new Date(this.daylightSavingTimeForm.daylightSavingKnowntime).getTime() - (this.daylightSavingTimeForm.daylightSavingUnknowntimeZone - this.daylightSavingTimeForm.daylightSavingKnowntimeZone)*1000*60*60)
 			},
-			timekeeping() {
-				var self = this
-				var timer = setInterval(function() {
-					var startTime = new Date();
-					startTime.setFullYear(2014, 2, 14);
-					startTime.setHours(0);
-					startTime.setMinutes(0);
-					startTime.setSeconds(0);
-					startTime.setMilliseconds(0);
-					
-					var endTime = new Date();
-					var rangeTime = endTime - startTime
-					var d, h, m, s, m, ms;
-					d = Math.floor(rangeTime / 1000 / 60 / 60 / 24);
-					h = Math.floor(rangeTime / 1000 / 60 / 60 % 24);
-					m = Math.floor(rangeTime / 1000 / 60 % 60);
-					s = Math.floor(rangeTime / 1000 % 60);
-					ms = Math.floor(rangeTime % 1000);
-					ms = ms < 100 && ms > 9 ? "0" + ms : ms < 9 ? "00" + ms : ms
-					s = s < 10 ? "0" + s : s
-					m = m < 10 ? "0" + m : m
-					h = h < 10 ? "0" + h : h
-					let format = "<span class=\"digit\">" + d + "</span> 天 <span class=\"digit\">" + h +
-						"</span> 时 <span class=\"digit\">" + m + "</span> 分 <span class=\"digit\">" +
-						s + "</span> 秒 ";
-					self.timeKeeping = format
-					clearInterval(this.timer);
-				}, 1000)
+			// 冬令时
+			getstandardUnkowntime(){
+				this.standardTimeForm.standardUnkowntime = new Date(new Date(this.standardTimeForm.standardKnowntime).getTime() - (this.standardTimeForm.standardUnknowntimeZone - this.standardTimeForm.standardKnowntimeZone)*1000*60*60)
 			},
-			updateTime() {
-				var winHeight = document.documentElement.clientHeight;
-				document.getElementsByTagName('body')[0].style.height = winHeight + 'px';
-				var $clock = document.getElementById('clock'),
-					$date = document.getElementById('date'),
-					$hour = document.getElementById('hour'),
-					$sec = document.getElementById('sec'),
-					$min = document.getElementById('min'),
-					oSecs = document.createElement('em');
-				for(var i = 1; i < 61; i++) {
-					var tempSecs = oSecs.cloneNode(),
-						pos = getSecPos(i);
-					if(i % 5 == 0) {
-						tempSecs.className = 'ishour';
-						tempSecs.innerHTML = '<i style="-webkit-transform:rotate(' + (-i * 6) + 'deg);">' + (i / 5) + '</i>';
-					}
-					tempSecs.style.cssText += 'position:absolute;' + 'left:' + pos.x + 'px; top:' + pos.y + 'px; -webkit-transform:rotate(' + i * 6 + 'deg)';
-					$clock.appendChild(tempSecs);
-				}
-				// 圆弧上的坐标换算 
-				function getSecPos(dep) {
-					var hudu = (2 * Math.PI / 360) * 6 * dep,
-						r = 100; //半径大小 
-					return {
-						x: Math.floor(r + Math.sin(hudu) * r),
-						y: Math.floor(r - Math.cos(hudu) * r),
-					}
-				};
-
-				(function() {
-					// 当前时间 
-					var _now = new Date(),
-						_h = _now.getHours(),
-						_m = _now.getMinutes(),
-						_s = _now.getSeconds();
-					var _day = _now.getDay();
-					var hour24 = _h
-					switch(_day) {
-						case 1:
-							_day = '星期一';
-							break;
-						case 2:
-							_day = '星期二';
-							break;
-						case 3:
-							_day = '星期三';
-							break;
-						case 4:
-							_day = '星期四';
-							break;
-						case 5:
-							_day = '星期五';
-							break;
-						case 6:
-							_day = '星期六';
-							break;
-						case 0:
-							_day = '星期日';
-							break;
-					}
-
-					function double(num) {
-						if(Number(num) < 10) {
-							num = "0" + num
-						}
-						return num
-					}
-					var time = function() {
-						$date.innerHTML = _now.getFullYear() + '年' + (_now.getMonth() + 1) + '月' + _now.getDate() + '日' + '<br/>' + double(hour24) + ':' + double(_m) + ':' + double(_s) + '<br/>' + _day;
-					}
-
-					//绘制时钟 
-					var gotime = function() {
-						var _h_dep = 0;
-						_s++;
-						if(_s > 59) {
-							_s = 0;
-							_m++;
-						}
-						if(_m > 59) {
-							_m = 0;
-							_h++;
-						}
-						if(_h > 12) {
-							_h = _h - 12;
-						}
-						//时针偏移距离 
-						_h_dep = Math.floor(_m / 12) * 6;
-						$hour.style.cssText = '-webkit-transform:rotate(' + (_h * 30 - 90 + _h_dep) + 'deg);';
-						$min.style.cssText = '-webkit-transform:rotate(' + (_m * 6 - 90) + 'deg);';
-						$sec.style.cssText = '-webkit-transform:rotate(' + (_s * 6 - 90) + 'deg);';
-					};
-					gotime();
-					time()
-					setInterval(gotime, 1000);
-					setInterval(time, 1000);
-				})();
+			// 时区
+			getmatrixingTimeZoneTime(){			
+				this.timeZoneForm.matrixingTimeZoneTime = new Date(new Date(this.timeZoneForm.knownTimeZoneTime).getTime() - ((this.timeZoneForm.knownTimeZone - this.timeZoneForm.matrixingTimeZone) *60 * 60 * 1000))
 			}
-		},
+		}
 	}
 </script>

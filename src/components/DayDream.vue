@@ -2,7 +2,7 @@
 	<div>
 		<v-header header='DayDream'></v-header>
 		<mu-container>
-			<mu-form ref="form" :model="form" class="mu-demo-form" :label-position="labelPosition" label-width="100">
+			<mu-form ref="form" :model="form" class="mu-demo-form" label-position="left" label-width="100">
 				<mu-form-item label="起始数字：" help-text="" prop="startNum" :rules="startNumRules">
 					<mu-text-field type="number" placeholder="请输入起始数字" v-model="form.startNum" prop="startNum" min='0' onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^0-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></mu-text-field>
 				</mu-form-item>
@@ -53,7 +53,6 @@
 		data() {
 			return {
 				orderOptions: ['否', '从小到大', '从大到小'],
-				labelPosition: 'left',
 				openSimple: false,
 				result: '',
 				form: {
@@ -153,10 +152,3 @@
 		}
 	}
 </script>
-<style scoped>
-	.mu-demo-form {
-		width: 100%;
-		max-width: 460px;
-	}
-	
-	</style>

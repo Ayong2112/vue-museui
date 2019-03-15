@@ -10,7 +10,7 @@
 
 <style scoped>
 .hearder{
-	font-size: 20px;
+	font-size: 0.3rem;
 	padding:10px 0;
 	background: #2196f3;
 	font-weight: 700;

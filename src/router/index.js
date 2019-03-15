@@ -21,6 +21,7 @@ var routes = [
         //     }
         // ]
     },
+
      { path: '/index', component: Index, name: 'Index' },,
      {
         path: '/me',
@@ -31,12 +32,12 @@ var routes = [
         component: resolve => require(['../components/DayDream.vue'], resolve),
     },
                 {
-        path: '/timeZone',
-        component: resolve => require(['../components/TimeZone.vue'], resolve),
+        path: '/note',
+        component: resolve => require(['../components/Note.vue'], resolve),
     },
                 {
-        path: '/time',
-        component: resolve => require(['../components/Time.vue'], resolve),
+        path: '/timeZone',
+        component: resolve => require(['../components/TimeZone.vue'], resolve),
     },
 ]
 // router.beforeEach((to, from, next) => {
@@ -47,7 +48,7 @@ var routes = [
 //     next()
 // })
 export default new Router({
-    // mode: 'history',
+    mode: 'history',
     routes: routes
 })
 
