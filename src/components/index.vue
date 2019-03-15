@@ -7,8 +7,8 @@
 			<mt-tab-item id="Time">
 				<img slot="icon" src="../assets/logo.png"> Time
 			</mt-tab-item>
-			<mt-tab-item id="Note">
-				<img slot="icon" src="../assets/logo.png"> Note
+			<mt-tab-item id="timeZone">
+				<img slot="icon" src="../assets/logo.png"> TimeZone
 			</mt-tab-item>
 			<mt-tab-item id="Me">
 				<img slot="icon" src="../assets/logo.png"> Me

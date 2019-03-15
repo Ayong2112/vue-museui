@@ -3,7 +3,7 @@
 		<mu-bottom-nav :value="bottomNav">
 			<mu-bottom-nav-item value='/dayDream' title="DayDream" icon="home" to="/dayDream" />
 			<mu-bottom-nav-item value='/time' title="Time" icon="timeroff" to="/time" />
-			<mu-bottom-nav-item value='/note' title="Note" icon="book" to="/note" />
+			<mu-bottom-nav-item value='/timeZone' title="timeZone" icon="access_time" to="/timeZone" />
 			<mu-bottom-nav-item value='/me' title="Me" icon="face" to="/me" />
 		</mu-bottom-nav>
 	</mu-container>
